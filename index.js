@@ -8,7 +8,7 @@
 
 const debug = require('debug')('express.spa')
 const path = require('path')
-
+const fs = require('fs')
 module.exports = serveSpa
 function serveSpa(root, options) {
     if (!root) {
@@ -24,24 +24,28 @@ function serveSpa(root, options) {
         throw new TypeError('Options must be of type object')
     }
 
-    var indexFilePath = options.indexFile ? path.join(root, options.indexFile) : path.join(root, 'index.html')
+    var indexFilePath = options && options.indexFile ? path.join(root, options.indexFile) : path.join(root, 'index.html')
 
     return function (req, res, next) {
         var lastUrlSection = req.url.substring(req.url.lastIndexOf('/') + 1)
         if (lastUrlSection.indexOf('.') !== -1) {
             var filePath = path.join(root, req.url)
             fs.stat(filePath, function onstat(err, stat) {
-                if (err) {
-                    return next(err)
-                }
+                if (err) return next(err)
                 res.sendFile(filePath, function (err) {
-                    next(error)
+                    if (err) return next(err)
                 })
             })
         } else {
-            res.sendFile(indexFilePath, function (err) {
-                next(error)
-            })
+            if (options.loginUrl && options.loginIndexPath && req.url === options.loginUrl) {
+                res.sendFile(path.join(root, options.loginIndexPath), function (err, stat) {
+                    if (err) return next(err)
+                })
+            } else {
+                res.sendFile(indexFilePath, function (err, stat) {
+                    if (err) return next(err)
+                })
+            }
         }
     }
 }
