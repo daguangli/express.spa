@@ -1,0 +1,30 @@
+{
+  "name": "express.spa",
+  "version": "1.0.0",
+  "description": "A Express middleware for serving Single Page application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daguangli/express.spa.git"
+  },
+  "keywords": [
+    "Express",
+    "Expressjs",
+    "SPA",
+    "middleware",
+    "angular",
+    "nodejs"
+  ],
+  "author": "Daguang Li",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daguangli/express.spa/issues"
+  },
+  "homepage": "https://github.com/daguangli/express.spa#readme",
+  "dependencies": {
+    "debug": "^2.6.8"
+  }
+}
