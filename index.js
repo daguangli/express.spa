@@ -10,21 +10,11 @@ const debug = require('debug')('express.spa')
 const path = require('path')
 const fs = require('fs')
 module.exports = serveSpa
-function serveSpa(root, options) {
-    if (!root) {
-        throw new TypeError('root path required')
-    }
-    if (typeof root !== 'string') {
-        throw new TypeError('root path must be a string')
-    }
-    if (!path.isAbsolute(root)) {
-        throw new TypeError('Only absoute path is supported')
-    }
-    if (options && typeof options !== 'object') {
-        throw new TypeError('Options must be of type object')
-    }
-
-    var indexFilePath = options && options.indexFile ? path.join(root, options.indexFile) : path.join(root, 'index.html')
+function serveSpa(opts) {
+    var opts = opts || {}
+        , root = opts.root || __dirname
+        , indexFileAbsPath = opts.indexFilePath ? path.join(root, opts.indexFile) : root
+        , indexFile = opts.indexFileName ? path.join(indexFileAbsPath, opt.indexFileName) : path.join(indexFileAbsPath, 'index.html')
 
     return function (req, res, next) {
         var lastUrlSection = req.url.substring(req.url.lastIndexOf('/') + 1)
@@ -37,12 +27,19 @@ function serveSpa(root, options) {
                 })
             })
         } else {
-            if (options.loginUrl && options.loginIndexPath && req.url === options.loginUrl) {
-                res.sendFile(path.join(root, options.loginIndexPath), function (err, stat) {
+            if (opts.loginUrl && opts.loginIndexPath && req.url === opts.loginUrl) {
+                debug('Separate login page url:' + req.url)
+                var loginPage
+                if (opts.loginFileName) {
+                    loginPage = path.join(root, opts.loginIndexPath, opts.loginFileName)
+                } else {
+                    loginPage = path.join(root, opts.loginIndexPath, 'index.html')
+                }
+                res.sendFile(loginPage, function (err, stat) {
                     if (err) return next(err)
                 })
             } else {
-                res.sendFile(indexFilePath, function (err, stat) {
+                res.sendFile(indexFile, function (err, stat) {
                     if (err) return next(err)
                 })
             }
