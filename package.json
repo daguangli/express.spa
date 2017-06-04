@@ -1,5 +1,5 @@
 {
-  "name": "express-spa",
+  "name": "express.spa",
   "version": "1.0.0",
   "description": "A Express middleware for serving Single Page application",
   "main": "index.js",
