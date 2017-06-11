@@ -13,7 +13,7 @@ module.exports = serveSpa
 function serveSpa(opts) {
     var opts = opts || {}
         , root = opts.root || __dirname
-        , indexFileAbsPath = opts.indexFilePath ? path.join(root, opts.indexFile) : root
+        , indexFileAbsPath = opts.indexFilePath ? path.join(root, opts.indexFilePath) : root
         , indexFile = opts.indexFileName ? path.join(indexFileAbsPath, opt.indexFileName) : path.join(indexFileAbsPath, 'index.html')
 
     return function (req, res, next) {
